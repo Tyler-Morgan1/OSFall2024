@@ -18,7 +18,7 @@ fn main() {
     let mut x = fahrenheit_to_celsius(temp);
     println!("{}", x);
 
-    for idx in 0..5 {
+    for _idx in 0..5 {
         temp += 1.0;
         x = fahrenheit_to_celsius(temp);
         println!("{}", x);
