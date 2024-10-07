@@ -13,6 +13,7 @@ fn main() {
     
     let mut x = false;
     let mut y = 0;
+    
     for idx in 0..nums.len() {
         y = nums[idx];
         // print whether even or odd
