@@ -34,7 +34,7 @@ impl MLFQ {
         // if the priority is vaid, add process to relevent priority queue 
         if process.priority <= self.num_levels - 1 {
             self.queues[process.priority].push(process);
-        } else {
+        } else { // otherwise add to last queue
             self.queues[self.num_levels - 1].push(process);
         }
     }
@@ -45,7 +45,31 @@ impl MLFQ {
         // Execute the process for its time quantum or until completion
         // Update remaining_time, total_executed_time, and current_time
         // Move the process to a lower priority queue if it doesn't complete
-      
+        
+        // use first process in queue - might need to check that queue isn't empty?
+        if queue_index < self.num_levels && self.queues[queue_index].len() > 0 {
+            let mut temp_quanta = self.time_quanta[queue_index];
+            let mut temp_process = self.queues[queue_index].remove(0);
+            //if quanta for that queue is less than time left
+            if temp_quanta < temp_process.remaining_time {
+                // update remaining_time
+                temp_process.remaining_time -= temp_quanta;
+                // update executed time
+                temp_process.total_executed_time += temp_quanta;
+                // if not already in last queue, change priority, move to next queue
+                if queue_index < self.num_levels - 1 {
+                    temp_process.priority += 1;
+                    self.queues[queue_index + 1].push(temp_process);
+                }
+                // update current time of mlfq by full quanta amount
+                self.current_time += temp_quanta;
+        // else, quanta is more than time left (aka process finished)
+            } else {
+                // update mlfq current time by adding remaining_time
+                self.current_time += temp_process.remaining_time;
+            }
+        }
+        
         
     }
 
