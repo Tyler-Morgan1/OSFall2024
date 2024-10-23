@@ -56,10 +56,17 @@ impl MLFQ {
         // Reset the priority of all processes to 0
 
         //for each queue level
+        for idx in (1..(self.num_levels)) {
             // while there is anything in that queue
-                // pop that process
+            while (self.queues[idx].len() > 0) {
+                // remove that process
+                let mut temp_process = self.queues[idx].remove(0);
                 // change priority to 0 of that process
+                temp_process.priority = 0;
                 // add it to queue with priority 0
+                self.queues[0].push(temp_process);
+            }
+        }
     }
 
     // Simulate time passing and trigger a boost if needed
